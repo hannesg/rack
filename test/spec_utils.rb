@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'rack/utils'
 require 'rack/mock'
+require 'timeout'
 
 describe Rack::Utils do
 
@@ -80,7 +81,7 @@ describe Rack::Utils do
   
   should "not hang on escaping long strings that end in % (http://redmine.ruby-lang.org/issues/5149)" do
     lambda {
-      timeout(1) do
+      Timeout.timeout(1) do
         lambda {
           URI.decode_www_form_component "A string that causes catastrophic backtracking as it gets longer %"
         }.should.raise(ArgumentError)
